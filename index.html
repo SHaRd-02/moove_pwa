@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mooove</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+<script>navigator.serviceWorker.register("sw.js")</script> 
+    <script src="https://kit.fontawesome.com/636eeb4dc2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- nav bar -->
+
+    <nav id="navbar">
+
+        <button id="search-section-btn" class="navbar-button">
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+        </button>
+
+        <button id="favorites-section-btn" class="navbar-button">
+            <i class="fa-solid fa-heart"></i>
+        </button>
+        
+        <button id="account-section-btn" class="navbar-button">
+            <i class="fa-solid fa-user"></i>
+        </button>
+
+    </nav>
+
+    <!-- search page -->
+    <section id="search-section" class="sections">
+
+        <h1>Search section</h1>
+
+    </section>
+
+
+    <!-- favorites page -->
+    <section id="favorites-section" class="sections hidden">
+
+        <h1>Favorites section</h1>
+
+    </section>
+
+
+    <!-- account page -->
+    <section id="account-section" class="sections hidden">
+
+        <h1>Account section</h1>
+
+    </section>
+    <script src="app.js"></script>
+</body>
+</html>
