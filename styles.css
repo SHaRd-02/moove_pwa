@@ -58,3 +58,11 @@ html, body {
     display: none !important;
 }
 
+/* Media query para pantallas más grandes que un smartphone */
+@media (min-width: 600px) {
+    body {
+        max-width: 700px;
+        max-height: 1244.44px;
+        border: solid 1px black;
+    }
+}
