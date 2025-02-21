@@ -32,6 +32,8 @@ body{
     position: relative;
     bottom: 0;
     background-color: var(--primary-color);
+    border-radius: 25px ;
+    border-bottom: solid 5px var(--primary-color);
 
 }
 
