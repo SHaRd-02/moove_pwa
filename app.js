@@ -12,7 +12,7 @@ const searchSectionEle = document.getElementById('search-section');
 function showSection(selected) {
     // Select all elements with the class "sections" (plural)
     let sections = document.querySelectorAll('.sections');
-    console.log(sections);
+    //console.log(sections);
     // Hide all sections
     sections.forEach(section => section.classList.add('hidden'));
 

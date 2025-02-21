@@ -6,7 +6,6 @@
     <title>Mooove</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
-<script>navigator.serviceWorker.register("sw.js")</script> 
     <script src="https://kit.fontawesome.com/636eeb4dc2.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -33,6 +32,15 @@
     <section id="search-section" class="sections">
 
         <h1>Search section</h1>
+
+        <div id="search-bar-div">
+            <div id="search-bars">
+                <input type="search" name="from-search" id="from-search" placeholder="from:" class="search-bar">
+                <hr>
+                <input type="search" name="to-search" id="to-search" placeholder="to:" class="search-bar">
+            </div>
+                <button id="search-bar-btn">Search</button>
+        </div>
 
     </section>
 
