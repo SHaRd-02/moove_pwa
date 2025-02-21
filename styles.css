@@ -11,6 +11,13 @@ html, body {
     width: 100%;
 }
 
+body{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Navbar styles */
 #navbar {
     width: 98%;
