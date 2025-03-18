@@ -25,42 +25,35 @@ function showSection(selected) {
 
 let map;
 
-function initMap(lat, lng) {
+function initMap(lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: lat, lng: lng }, // Coordenadas de la UABC Valle de las Palmas
+        center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
         zoom: 12,
     });
 
-    fetch("http://127.0.0.1:5000/routes")
-        .then(response => response.json())
-        .then(routes => {
-            routes.forEach(route => {
-                let path = JSON.parse(route.waypoints);
-                let routePath = new google.maps.Polyline({
-                    path: path,
-                    geodesic: true,
-                    strokeColor: "#FF0000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
-                });
-                routePath.setMap(map);
-            });
-        })
-        .catch(error => console.error("Error cargando rutas:", error));
+};
+
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    alert("Browser not supported");
+  }
 }
 
+function success(position) {
+    const lati = position.coords.latitude; 
+    const longi = position.coords.longitude;
+    console.log("Latitude: ", lati);
+    console.log("Longitude: ", longi);
+    initMap(lati, longi);
 
-function getLocation (){
-    if (navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(success, error);
-    }else{
-        alert("Geolocation not supported");
-    };
-};
+}
 
-function success (position){
-    initMap(position.coords.latitude, position.coords.longitude);
-};
+function error() {
+  alert("Sorry, no position available.");
+}
 
 document.addEventListener("DOMContentLoaded", getLocation);
 
