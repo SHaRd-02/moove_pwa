@@ -7,6 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/636eeb4dc2.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqjjaPXLEl9FT77wAfImYFpp2sIcpG5jM&callback=initMap" async defer></script>
 </head>
 <body>
 
@@ -31,8 +32,8 @@
     <!-- search page -->
     <section id="search-section" class="sections">
 
-        <h1>Search section</h1>
 
+        <!-- search bar div -->
         <div id="search-bar-div">
             <div id="search-bars">
                 <input type="search" name="from-search" id="from-search" placeholder="from:" class="search-bar">
@@ -41,6 +42,9 @@
             </div>
                 <button id="search-bar-btn">Search</button>
         </div>
+
+        <!-- Contenedor para el mapa -->
+        <div id="map"></div>
 
     </section>
 
