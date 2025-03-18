@@ -25,9 +25,9 @@ function showSection(selected) {
 
 let map;
 
-function initMap() {
+function initMap(lat, lng) {
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 32.5245, lng: -116.9742 }, // Coordenadas de la UABC Valle de las Palmas
+        center: { lat: lat, lng: lng }, // Coordenadas de la UABC Valle de las Palmas
         zoom: 12,
     });
 
@@ -49,7 +49,20 @@ function initMap() {
         .catch(error => console.error("Error cargando rutas:", error));
 }
 
-document.addEventListener("DOMContentLoaded", initMap);
+
+function getLocation (){
+    if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(success, error);
+    }else{
+        alert("Geolocation not supported");
+    };
+};
+
+function success (position){
+    initMap(position.coords.latitude, position.coords.longitude);
+};
+
+document.addEventListener("DOMContentLoaded", getLocation);
 
 
 
