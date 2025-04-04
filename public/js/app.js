@@ -1,3 +1,6 @@
+// imports from other js files
+import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
+
 // DOM elements
 // nav buttons
 const searchSectionBtn = document.getElementById('search-section-btn');
@@ -7,6 +10,9 @@ const accountSectionBtn = document.getElementById('account-section-btn');
 const accountSectionEle = document.getElementById('account-section');
 const favoritesSectionEle = document.getElementById('favorites-section');
 const searchSectionEle = document.getElementById('search-section');
+// select route elements
+const selectRouteEle = document.getElementById('select-route');
+const selectRouteBtn = document.getElementById('select-route-btn');
 
 // Function to show a section
 function showSection(selected) {
@@ -24,14 +30,31 @@ function showSection(selected) {
 // google maps map
 
 let map;
+let currentRoute = null;
+let directionsService;
+let directionsRenderer;
+
 
 function initMap(lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
         zoom: 14,
+        disableDefaultUI: true,
+    });
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      map: map,
+      suppressMarkers: false,
+      polylineOptions: {
+        strokeColor: "#6272A4",
+        strokeWeight: 5,
+      }
     });
 
 };
+
+
 
 
 function getLocation() {
@@ -92,5 +115,46 @@ favoritesSectionBtn.addEventListener('click', () => {
 
 searchSectionBtn.addEventListener('click', () => {
     showSection(searchSectionEle);
+});
+
+// Event listener for select route
+selectRouteBtn.addEventListener("click", () => {
+  const selectedValue = selectRouteEle.value;
+
+  if (selectedValue === "1") {
+    directionsService.route(
+      {
+        origin: ruta5y10ValleCoords[0],
+        destination: ruta5y10ValleCoords[1],
+        waypoints: ruta5y10ValleWaypoints,
+        travelMode: google.maps.TravelMode.DRIVING,
+        optimizeWaypoints: false
+      },
+      (response, status) => {
+        if (status === "OK") {
+          directionsRenderer.setDirections(response);
+        } else {
+          alert("Error al generar la ruta: " + status);
+        }
+      }
+    );
+  }
+  else if(selectedValue === "2"){
+    directionsService.route(
+      {
+        origin: rutaRefugioValleCoords[0],
+        destination: rutaRefugioValleCoords[1],
+        travelMode: google.maps.TravelMode.DRIVING,
+        optimizeWaypoints: false
+      },
+      (response, status) => {
+        if (status === "OK") {
+          directionsRenderer.setDirections(response);
+        } else {
+          alert("Error al generar la ruta: " + status);
+        }
+      }
+    );
+  }
 });
 
