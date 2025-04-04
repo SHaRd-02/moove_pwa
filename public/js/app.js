@@ -19,6 +19,10 @@ const routeDestinationEle = document.getElementById('route-destiny');
 const tarifPriceEle = document.getElementById('tarif-price');
 const routeEtaEle = document.getElementById('route-eta');
 
+// start trip elements
+const startTripBtn = document.getElementById('start-trip-btn');
+
+
 // Function to show a section
 function showSection(selected) {
     // Select all elements with the class "sections" (plural)
@@ -32,12 +36,7 @@ function showSection(selected) {
 }
 
 
-// google maps map
-
-let map;
-let currentRoute = null;
-let directionsService;
-let directionsRenderer;
+// global colors
 
 const buttonColor = "#BD93F9";
 const foregroundColor = "#F8F8F2"; 
@@ -47,11 +46,21 @@ const secondaryColor= "pink";
 const navbarColor= "#6272A4";
 const waterColor = "#4a69c6";
 
+// google maps map
+
+let map;
+let currentRoute = null;
+let directionsService;
+let directionsRenderer;
+let userMarker = null;
+const zoomLevel = 14;
+
+
 
 window.initMap = function (lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
-        zoom: 14,
+        zoom: zoomLevel,
         disableDefaultUI: true,
         styles: [
           {
@@ -169,14 +178,17 @@ searchSectionBtn.addEventListener('click', () => {
 });
 
 // Event listener for select route
+let currentRoutePath = [];
+
 selectRouteBtn.addEventListener("click", () => {
   const selectedValue = selectRouteEle.value;
 
   if (selectedValue === "1") {
+    // Configuración de la ruta 1
+    startTripBtn.disabled = false; // Activa el botón
     routeOriginEle.innerText = "5 y 10";
     routeDestinationEle.innerText = "UABC Valle";
     tarifPriceEle.innerText = "$20";
-
     directionsService.route(
       {
         origin: ruta5y10ValleCoords[0],
@@ -188,16 +200,10 @@ selectRouteBtn.addEventListener("click", () => {
       (response, status) => {
         if (status === "OK") {
           directionsRenderer.setDirections(response);
-
-          // Calcular ETA
-          const legs = response.routes[0].legs;
-          let totalDuration = 0;
-
-          legs.forEach(leg => {
-            totalDuration += leg.duration.value; // en segundos
-          });
-
-          const etaMin = Math.ceil(totalDuration / 60); // convertir a minutos
+          currentRoutePath = response.routes[0].overview_path;
+          // Calcular y mostrar el tiempo estimado de llegada (ETA)
+          const totalDuration = response.routes[0].legs.reduce((sum, leg) => sum + leg.duration.value, 0);
+          const etaMin = Math.ceil(totalDuration / 60);
           routeEtaEle.innerText = `${etaMin} minutos`;
         } else {
           alert("Error al generar la ruta: " + status);
@@ -205,10 +211,11 @@ selectRouteBtn.addEventListener("click", () => {
       }
     );
   } else if (selectedValue === "2") {
+    // Configuración de la ruta 2
+    startTripBtn.disabled = false; // Activa el botón
     routeOriginEle.innerText = "Refugio";
     routeDestinationEle.innerText = "UABC Valle";
-    tarifPriceEle.innerText = "$18";
-
+    tarifPriceEle.innerText = "$20";
     directionsService.route(
       {
         origin: rutaRefugioValleCoords[0],
@@ -219,15 +226,9 @@ selectRouteBtn.addEventListener("click", () => {
       (response, status) => {
         if (status === "OK") {
           directionsRenderer.setDirections(response);
-
-          // Calcular ETA
-          const legs = response.routes[0].legs;
-          let totalDuration = 0;
-
-          legs.forEach(leg => {
-            totalDuration += leg.duration.value;
-          });
-
+          currentRoutePath = response.routes[0].overview_path;
+          // Calcular y mostrar el tiempo estimado de llegada (ETA)
+          const totalDuration = response.routes[0].legs.reduce((sum, leg) => sum + leg.duration.value, 0);
           const etaMin = Math.ceil(totalDuration / 60);
           routeEtaEle.innerText = `${etaMin} minutos`;
         } else {
@@ -238,3 +239,78 @@ selectRouteBtn.addEventListener("click", () => {
   }
 });
 
+// start trip btn event listener 
+
+
+startTripBtn.addEventListener('click', () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        const tolerance = 20 / 111320; // 20 metros en grados
+
+        const isNearRoute = google.maps.geometry.poly.isLocationOnEdge(userLocation, new google.maps.Polyline({ path: currentRoutePath }), tolerance);
+
+        if (isNearRoute) {
+          // El usuario está dentro del radio permitido, iniciar el viaje
+          startTripBtn.disabled = true;
+          startTripBtn.innerText = 'Viaje en curso...';
+          routeEtaEle.style.color = "rgb(15, 203, 15)";
+
+          // Iniciar seguimiento de la ubicación del usuario
+          navigator.geolocation.watchPosition(
+            position => {
+              const userPosition = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+
+              if (userMarker) {
+                userMarker.setPosition(userPosition);
+              } else {
+                userMarker = new google.maps.Marker({
+                  position: userPosition,
+                  map: map,
+                  title: "Tu ubicación",
+                  icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 7,
+                    fillColor: "#00BFFF",
+                    fillOpacity: 1,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2
+                  }
+                });
+              }
+
+              map.setCenter(userPosition);
+              map.setZoom(zoomLevel);
+            },
+            error => {
+              console.error("Error al obtener ubicación:", error);
+            },
+            {
+              enableHighAccuracy: true,
+              maximumAge: 0,
+              timeout: 5000
+            }
+          );
+        } else {
+          // El usuario está fuera del radio permitido
+          alert("Debes estar dentro de 20 metros de la ruta para iniciar el viaje.");
+        }
+      },
+      error => {
+        console.error("Error al obtener ubicación:", error);
+        alert("No se pudo obtener tu ubicación.");
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000
+      }
+    );
+  } else {
+    alert("Geolocalización no soportada en este navegador.");
+  }
+});

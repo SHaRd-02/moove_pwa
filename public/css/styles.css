@@ -138,17 +138,19 @@ body{
 
 #select-route-div{
     border: 1px white;
-    width: 90%;
+    width: 95%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 
 #select-route{
-    width: 85%;
+    width: 70%;
     height: 2em;
+    font-size: 15px;
+    font-weight: 500;
     border-radius: 5px;
     padding: 5px;
     color: var(--primary-color);
@@ -157,9 +159,11 @@ body{
 #select-route-btn{
     background-color: var(--button-color);
     color: var(--foreground-color);
-    width: 10%;
+    width: 20%;
     padding: 5px;
     border-radius: 5px;
+    font-size: 20px;
+
 }
 
 .fa-solid{
@@ -295,6 +299,20 @@ body{
 .stop-name{
     font-size: 18px;
     font-weight: 500;
+}
+
+#start-trip-btn{
+    width: 90%;
+    height: 2em;
+    font-size: 30px;
+    border-radius: 5px;
+    background-color: var(--button-color);
+    color: var(--foreground-color);
+}
+
+#start-trip-btn:disabled{
+    color: var(--navbar-color);
+    background-color: var(--ui-bg-color);
 }
 
 /* Media query para pantallas más grandes que un smartphone */

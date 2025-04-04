@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://kit.fontawesome.com/636eeb4dc2.js" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGwrYT3Vgvorgg2qP0T5OKgkbVN2YCZDk&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGwrYT3Vgvorgg2qP0T5OKgkbVN2YCZDk&libraries=geometry&callback=initMap" async defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     ß<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -75,7 +75,7 @@
         <!-- Contenedor para el mapa -->
         <div id="map"></div>
 
-        <!-- temp routes info -->
+        <!-- routes info -->
 
         <div id="routes-info-div">
             
@@ -109,6 +109,9 @@
             </div>
 
         </div>
+
+        <!-- start trip button -->
+        <button id="start-trip-btn" disabled>Iniciar viaje</button>
 
     </section>
 
