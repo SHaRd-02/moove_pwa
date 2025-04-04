@@ -34,12 +34,58 @@ let currentRoute = null;
 let directionsService;
 let directionsRenderer;
 
+const buttonColor = "#BD93F9";
+const foregroundColor = "#F8F8F2"; 
+const backgroundColor= "#282A36"; 
+const uiBgColor = "#44475A"; 
+const secondaryColor= "pink";
+const navbarColor= "#6272A4";
+const waterColor = "#4a69c6";
+
 
 function initMap(lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
         zoom: 14,
         disableDefaultUI: true,
+        styles: [
+          {
+              elementType: "geometry",
+              stylers: [{ color: uiBgColor }]
+          },
+          {
+              elementType: "labels.icon",
+              stylers: [{ visibility: "off" }]
+          },
+          {
+              elementType: "labels.text.fill",
+              stylers: [{ color: foregroundColor }]
+          },
+          {
+              elementType: "labels.text.stroke",
+              stylers: [{ color: backgroundColor }]
+          },
+          {
+              featureType: "administrative",
+              elementType: "geometry",
+              stylers: [{ visibility: "off" }]
+          },
+          {
+              featureType: "poi",
+              elementType: "geometry",
+              stylers: [{ visibility: "off" }]
+          },
+          {
+              featureType: "road",
+              elementType: "geometry",
+              stylers: [{ color: navbarColor }]
+          },
+          {
+              featureType: "water",
+              elementType: "geometry",
+              stylers: [{ color: waterColor }]
+          }
+      ]
     });
 
     directionsService = new google.maps.DirectionsService();
@@ -47,7 +93,7 @@ function initMap(lati, longi) {
       map: map,
       suppressMarkers: false,
       polylineOptions: {
-        strokeColor: "#6272A4",
+        strokeColor: buttonColor,
         strokeWeight: 5,
       }
     });

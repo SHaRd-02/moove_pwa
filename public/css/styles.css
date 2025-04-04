@@ -6,7 +6,9 @@
     --ui-bg-color: #44475A; 
     --secondary-color: pink;
     --navbar-color: #6272A4;
+    --water-color: #4a69c6;
 }
+
 
 html, body {
     margin: 0;
@@ -167,10 +169,12 @@ body{
 #map{
     width: 90%;
     height: 550px;
-    border: solid 1px black;
+    border:  1px black;
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
+    background-color: var(--ui-bg-color);
+
 }
 
 
