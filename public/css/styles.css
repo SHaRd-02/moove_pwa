@@ -130,8 +130,34 @@ body{
     width: 100%;
 }
 
+#select-route-div{
+    border: solid  white;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#select-route{
+    width: 85%;
+    height: 2em;
+    border-radius: 5px;
+    padding: 5px;
+    color: var(--primary-color);
+}
+
+#select-route-btn{
+    background-color: var(--button-color);
+    color: var(--foreground-color);
+    width: 10%;
+    padding: 5px;
+    border-radius: 5px;
+}
+
 .fa-solid{
-    color: black !important;
+    color: var(--foreground-color) !important;
 }
 
 .hidden {
