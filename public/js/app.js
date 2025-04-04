@@ -13,6 +13,11 @@ const searchSectionEle = document.getElementById('search-section');
 // select route elements
 const selectRouteEle = document.getElementById('select-route');
 const selectRouteBtn = document.getElementById('select-route-btn');
+// routes div info elements
+const routeOriginEle = document.getElementById('route-origin');
+const routeDestinationEle = document.getElementById('route-destiny');
+const tarifPriceEle = document.getElementById('tarif-price');
+const routeEtaEle = document.getElementById('route-eta');
 
 // Function to show a section
 function showSection(selected) {
@@ -43,7 +48,7 @@ const navbarColor= "#6272A4";
 const waterColor = "#4a69c6";
 
 
-function initMap(lati, longi) {
+window.initMap = function (lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
         zoom: 14,
@@ -168,34 +173,63 @@ selectRouteBtn.addEventListener("click", () => {
   const selectedValue = selectRouteEle.value;
 
   if (selectedValue === "1") {
+    routeOriginEle.innerText = "5 y 10";
+    routeDestinationEle.innerText = "UABC Valle";
+    tarifPriceEle.innerText = "$20";
+
     directionsService.route(
       {
         origin: ruta5y10ValleCoords[0],
         destination: ruta5y10ValleCoords[1],
         waypoints: ruta5y10ValleWaypoints,
         travelMode: google.maps.TravelMode.DRIVING,
-        optimizeWaypoints: false
+        optimizeWaypoints: false,
       },
       (response, status) => {
         if (status === "OK") {
           directionsRenderer.setDirections(response);
+
+          // Calcular ETA
+          const legs = response.routes[0].legs;
+          let totalDuration = 0;
+
+          legs.forEach(leg => {
+            totalDuration += leg.duration.value; // en segundos
+          });
+
+          const etaMin = Math.ceil(totalDuration / 60); // convertir a minutos
+          routeEtaEle.innerText = `${etaMin} minutos`;
         } else {
           alert("Error al generar la ruta: " + status);
         }
       }
     );
-  }
-  else if(selectedValue === "2"){
+  } else if (selectedValue === "2") {
+    routeOriginEle.innerText = "Refugio";
+    routeDestinationEle.innerText = "UABC Valle";
+    tarifPriceEle.innerText = "$18";
+
     directionsService.route(
       {
         origin: rutaRefugioValleCoords[0],
         destination: rutaRefugioValleCoords[1],
         travelMode: google.maps.TravelMode.DRIVING,
-        optimizeWaypoints: false
+        optimizeWaypoints: false,
       },
       (response, status) => {
         if (status === "OK") {
           directionsRenderer.setDirections(response);
+
+          // Calcular ETA
+          const legs = response.routes[0].legs;
+          let totalDuration = 0;
+
+          legs.forEach(leg => {
+            totalDuration += leg.duration.value;
+          });
+
+          const etaMin = Math.ceil(totalDuration / 60);
+          routeEtaEle.innerText = `${etaMin} minutos`;
         } else {
           alert("Error al generar la ruta: " + status);
         }

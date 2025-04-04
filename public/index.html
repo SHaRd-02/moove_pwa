@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://kit.fontawesome.com/636eeb4dc2.js" crossorigin="anonymous"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGwrYT3Vgvorgg2qP0T5OKgkbVN2YCZDk&callback=initMap" async defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    ß<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
@@ -71,6 +74,41 @@
 
         <!-- Contenedor para el mapa -->
         <div id="map"></div>
+
+        <!-- temp routes info -->
+
+        <div id="routes-info-div">
+            
+            <div id="route-name" class="route-info-row">
+                <div id="route-origin" class="route-label">Origen</div>
+                <div id="route-destiny" class="route-p">Destino</div>
+            </div>
+            <div id="tarif-tag" class="route-info-row">
+                <label for="tarif-price" class="route-label">Tarifa: </label>
+                <p id="tarif-price" class="route-p">$ --</p>
+            </div>
+            <details id="stops-details" >
+                <summary id="summary-stop-details">
+                     ver paradas 
+                </summary>
+                <div class="stops-label">
+                    <div class="stop-number">
+                        A
+                    </div>
+                    <div class="stop-line">
+                        ------ >
+                    </div>
+                    <div class="stop-name">
+                        5 y 10 
+                    </div>
+                </div>
+            </details>
+            <div id="estimated-time" class="route-info-row">
+                <label for="route-eta" class="route-label">Tiempo:</label>
+                <p class="route-p" id="route-eta" >--</p>
+            </div>
+
+        </div>
 
     </section>
 
