@@ -3,8 +3,8 @@
   "short_name": "Moove",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0078d7",
+  "background_color": "#282A36",
+  "theme_color": "#282A36",
   "description": "A route app meant for schools",
   "icons": [
     {
