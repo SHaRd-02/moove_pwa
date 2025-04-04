@@ -8,13 +8,13 @@
   "description": "A route app meant for schools",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
+      "src": "icons/Assets.xcassets/AppIcon.appiconset/180.png",
+      "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
+      "src": "icons/Assets.xcassets/AppIcon.appiconset/1024.png",
+      "sizes": "1024x1024",
       "type": "image/png"
     }
   ],
