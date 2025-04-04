@@ -28,7 +28,7 @@ let map;
 function initMap(lati, longi) {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
-        zoom: 12,
+        zoom: 14,
     });
 
 };
@@ -54,6 +54,28 @@ function success(position) {
 function error() {
   alert("Sorry, no position available.");
 }
+
+async function solicitarPermiso() {
+    const permiso = await Notification.requestPermission();
+    if (permiso === 'granted') {
+      console.log('Permiso para notificaciones concedido.');
+    } else {
+      console.log('Permiso denegado.');
+    }
+  };
+solicitarPermiso();
+
+async function suscribirse() {
+    const registro = await navigator.serviceWorker.ready;
+    const suscripcion = await registro.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: 'BBswnwYK1ainOyoSKM-kQ6Dx7-rz35pItXaKp-N_OQoRAjjl040Jax0nYE4qJDBMcdYAhIHGlcBY3OTj27Za61A',
+    });
+  
+    console.log('Suscripción:', JSON.stringify(suscripcion));
+    // Aquí envías la suscripción al servidor para almacenarla
+  }
+  suscribirse();
 
 document.addEventListener("DOMContentLoaded", getLocation);
 

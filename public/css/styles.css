@@ -1,6 +1,11 @@
 :root {
     --primary-color: rgb(73, 118, 215); 
+    --button-color: #BD93F9;
+    --foreground-color: #F8F8F2; 
+    --background-color: #282A36; 
+    --ui-bg-color: #44475A; 
     --secondary-color: pink;
+    --navbar-color: #6272A4;
 }
 
 html, body {
@@ -12,6 +17,8 @@ html, body {
     scroll-behavior: smooth;
     overflow-x: hidden;
     overflow-y: hidden;
+    background-color: var(--background-color) !important;
+    color: var(--foreground-color);
 }
 
 body{
@@ -19,6 +26,7 @@ body{
     flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
+    background-color: var(--background-color);
 
 }
 
@@ -32,7 +40,7 @@ body{
     align-items: center;
     position: relative;
     bottom: 0;
-    background-color: var(--primary-color);
+    background-color: var(--navbar-color);
     border-radius: 25px 25px 0 0 ;
     border-bottom: solid 10px var(--primary-color);
 
@@ -47,6 +55,7 @@ body{
     background-color: transparent;
     border: 1px  black;
     font-size: 30px;
+    color: var(--button-color);
 }
 
 .navbar-button:active {
@@ -62,6 +71,7 @@ body{
     align-items: center;
     height: 88%;
     width: 100%;
+    background-color: var(--background-color);
 }
 
 #search-bar-div{
@@ -74,13 +84,14 @@ body{
     flex-wrap: nowrap;
     justify-content: right;
     align-items: center;
-    background-color: white;
+    background-color: var(--ui-bg-color);
 }
 
 #search-bars{
     border: 1px black;
     width: 70%;
     height: 98%;
+    background-color: var(--ui-bg-color);
 }
 
 #search-bars > hr{
@@ -95,7 +106,8 @@ body{
     height: 48%;
     font-size: 14px;
     border: none;
-    background-color: white;
+    background-color: var(--ui-bg-color);
+    color: var(--foreground-color);
     
 }
 
@@ -105,12 +117,17 @@ body{
     border-radius: 0 10px 10px 0;
     border: none;
     color: white;
-    background-color: var(--secondary-color);
+    background-color: var(--button-color);
 }
 
 #search-bar-btn:active{
     background-color: blueviolet;
 
+}
+
+#search-hr{
+    margin-left: -12px;
+    width: 100%;
 }
 
 .fa-solid{
@@ -129,6 +146,8 @@ body{
     margin-bottom: 20px;
     border-radius: 10px;
 }
+
+
 
 /* Media query para pantallas más grandes que un smartphone */
 @media (min-width: 600px) {
