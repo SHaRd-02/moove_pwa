@@ -1,0 +1,24 @@
+{
+  "name": "Mooove",
+  "short_name": "Moove",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#282A36",
+  "theme_color": "#282A36",
+  "description": "A route app meant for schools",
+  "icons": [
+    {
+      "src": "icons/Assets.xcassets/AppIcon.appiconset/180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/Assets.xcassets/AppIcon.appiconset/1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "lang": "en-US"
+}
