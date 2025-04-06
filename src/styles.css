@@ -360,6 +360,7 @@ body{
     align-items: center;
     height: 75%;
     background-color: var(--card-body);
+    border-radius: 0 0 10px 10px;
 }
 
 #user-card-left{
@@ -372,6 +373,7 @@ body{
     align-items: center;
     gap: 10px;
     background-color: var(--card-left);
+    border-radius: 0 0 0 10px;
 
 }
 
@@ -385,6 +387,7 @@ body{
     justify-content: center;
     gap: 3px;
     padding-left: 15px;
+    border-radius: 0 0 10px 0;
 }
 
 #user-card-img{

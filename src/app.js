@@ -224,6 +224,7 @@ function handleLogin() {
         }));
         userInfo = JSON.parse(storedUserString);
         loadUserInfoCard(userInfo);
+        alert('info loaded');
 
       } else {
         // No hay ningún usuario autenticado
@@ -253,6 +254,7 @@ const logout = () => {
 // Event listener for nav button
 accountSectionBtn.addEventListener('click', () => {
     showSection(accountSectionEle);
+    loadUserInfoCard(user);
 });
 
 favoritesSectionBtn.addEventListener('click', () => {
