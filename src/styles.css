@@ -8,6 +8,9 @@
     --navbar-color: #6272A4;
     --water-color: #4a69c6;
     --stop-number: rgb(237, 87, 23);
+    --card-body: #899E8B;
+    --card-banner: #2cc04c;
+    --card-left: #706C61;
 }
 
 
@@ -75,7 +78,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 88%;
+    height: 100%;
     width: 100%;
     background-color: var(--background-color);
 }
@@ -301,7 +304,7 @@ body{
     font-weight: 500;
 }
 
-#start-trip-btn{
+#start-trip-btn, .big-btn{
     width: 90%;
     height: 2em;
     font-size: 30px;
@@ -310,9 +313,94 @@ body{
     color: var(--foreground-color);
 }
 
+.big-btn{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 50px;
+    background-color: var(--ui-bg-color);
+}
+
 #start-trip-btn:disabled{
     color: var(--navbar-color);
     background-color: var(--ui-bg-color);
+}
+
+#user-card-div{
+    width: 90%;
+    border: solid 1px white;
+    border-radius: 10px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    
+}
+
+#user-card-banner{
+    width: 100%;
+    text-align: center;
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    background-color: var(--card-banner);
+    border-radius: 10px 10px 0 0;
+}
+
+#user-card-body{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 75%;
+    background-color: var(--card-body);
+}
+
+#user-card-left{
+    width: 30%;
+    height: 100%;
+    border-right: solid 1px white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--card-left);
+
+}
+
+#user-card-right{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+    width: 65%;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+    padding-left: 15px;
+}
+
+#user-card-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: solid 1px white;
+}
+
+.user-card-labels{
+    display: block;
+    width: 90%;
+}
+
+.user-card-input{
+    width: 90%;
 }
 
 /* Media query para pantallas más grandes que un smartphone */

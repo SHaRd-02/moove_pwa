@@ -1,5 +1,8 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
+import { signInWithGoogle, getUserFromRedirect, auth } from './firebase.js';
+import { doc } from "firebase/firestore";
+
 
 // DOM elements
 // nav buttons
@@ -18,9 +21,13 @@ const routeOriginEle = document.getElementById('route-origin');
 const routeDestinationEle = document.getElementById('route-destiny');
 const tarifPriceEle = document.getElementById('tarif-price');
 const routeEtaEle = document.getElementById('route-eta');
-
 // start trip elements
 const startTripBtn = document.getElementById('start-trip-btn');
+// card user elements
+const userCardImg = document.getElementById('user-card-img');
+const userCardName = document.getElementById('user-card-name');
+const userCardMiddleName = document.getElementById('user-card-middle-name');
+const userCardLastname = document.getElementById('user-card-lastname'); 
 
 
 // Function to show a section
@@ -55,6 +62,32 @@ let directionsRenderer;
 let userMarker = null;
 const zoomLevel = 14;
 
+
+//user info from firebase
+let userInfo;
+
+function loadUserInfoCard(user){
+  const userFullName = user.displayName.split(" ");
+  const name = userFullName[0];
+  const middle = userFullName[1]; 
+  const last = userFullName[2]; 
+
+  userCardName.value = name;
+  userCardMiddleName.value = middle;
+  userCardLastname.value = last;
+  userCardImg.src = user.photoURL;
+
+};
+
+const storedUserString = sessionStorage.getItem('user');
+
+if (storedUserString) {
+  userInfo = JSON.parse(storedUserString);
+  loadUserInfoCard(userInfo);
+  // Ya puedes usar user.uid, user.email, etc.
+} else {
+  // No hay sesión activa
+}
 
 
 window.initMap = function (lati, longi) {
@@ -158,11 +191,64 @@ async function suscribirse() {
     console.log('Suscripción:', JSON.stringify(suscripcion));
     // Aquí envías la suscripción al servidor para almacenarla
   }
-  suscribirse();
+  
+suscribirse();
+  
 
 document.addEventListener("DOMContentLoaded", getLocation);
 
+// firebase functions 
 
+// Función que se llama cuando el usuario hace click en el botón de "Iniciar sesión"
+function handleLogin() {
+  signInWithGoogle()
+    .then((user) => {
+      console.log('Usuario autenticado:', user);
+      // Obtener información del usuario actual
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        // El usuario está autenticado
+        console.log('Usuario autenticado:', currentUser);
+        console.log('Email:', currentUser.email);
+        console.log('UID:', currentUser.uid);
+        console.log('Nombre:', currentUser.displayName);
+        console.log('Foto de perfil:', currentUser.photoURL);
+
+        // Guardar los datos del usuario en sessionStorage
+        sessionStorage.setItem('user', JSON.stringify({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL
+        }));
+        userInfo = JSON.parse(storedUserString);
+        loadUserInfoCard(userInfo);
+
+      } else {
+        // No hay ningún usuario autenticado
+        console.log('No hay un usuario autenticado');
+      }
+      // Aquí puedes agregar la lógica para manejar el usuario autenticado
+    })
+    .catch((error) => {
+      console.error('Error de autenticación:', error);
+    });
+}
+
+
+
+
+// Método para cerrar sesión
+const logout = () => {
+  signOut(auth)
+    .then(() => {
+      console.log('Usuario desconectado');
+    })
+    .catch((error) => {
+      console.error('Error al cerrar sesión:', error);
+    });
+};
 
 // Event listener for nav button
 accountSectionBtn.addEventListener('click', () => {
@@ -313,4 +399,15 @@ startTripBtn.addEventListener('click', () => {
   } else {
     alert("Geolocalización no soportada en este navegador.");
   }
+});
+
+
+// sign in with google btn
+
+document.getElementById('sign-in-google-btn').addEventListener('click', () =>{
+  handleLogin();
+});
+
+document.getElementById('show-user-btn').addEventListener('click', () => {
+  //handleRedirectResult();
 });
