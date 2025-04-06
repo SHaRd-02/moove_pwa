@@ -222,7 +222,7 @@ function handleLogin() {
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL
         }));
-        userInfo = JSON.parse(storedUserString);
+        userInfo = JSON.parse(sessionStorage.getItem('user'));
         loadUserInfoCard(userInfo);
         alert('info loaded');
 
@@ -254,7 +254,7 @@ const logout = () => {
 // Event listener for nav button
 accountSectionBtn.addEventListener('click', () => {
     showSection(accountSectionEle);
-    loadUserInfoCard(user);
+    loadUserInfoCard(userInfo);
 });
 
 favoritesSectionBtn.addEventListener('click', () => {
