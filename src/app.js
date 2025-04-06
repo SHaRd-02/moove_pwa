@@ -1,7 +1,8 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
-import { signInWithGoogle, getUserFromRedirect, auth } from './firebase.js';
+import { signInWithGoogle, getUserFromRedirect, auth, signOutUser } from './firebase.js';
 import { doc } from "firebase/firestore";
+
 
 
 // DOM elements
@@ -27,7 +28,9 @@ const startTripBtn = document.getElementById('start-trip-btn');
 const userCardImg = document.getElementById('user-card-img');
 const userCardName = document.getElementById('user-card-name');
 const userCardMiddleName = document.getElementById('user-card-middle-name');
-const userCardLastname = document.getElementById('user-card-lastname'); 
+const userCardLastname = document.getElementById('user-card-lastname');
+const signOutBtn = document.getElementById('sign-out-btn'); 
+const signInGoogleBtn = document.getElementById('sign-in-google-btn');
 
 
 // Function to show a section
@@ -67,26 +70,38 @@ const zoomLevel = 14;
 let userInfo;
 
 function loadUserInfoCard(user){
+  if (!user){
+    console.log('no user found');
+    userCardName.value = "";
+    userCardMiddleName.value = ""; 
+    userCardLastname.value = ""; 
+    userCardImg.src = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png"; 
+    return;
+  }
+
   const userFullName = user.displayName.split(" ");
-  const name = userFullName[0];
-  const middle = userFullName[1]; 
-  const last = userFullName[2]; 
+  const name = userFullName[0] || "";
+  const middle = userFullName[1] || ""; 
+  const last = userFullName[2] || ""; 
 
   userCardName.value = name;
   userCardMiddleName.value = middle;
   userCardLastname.value = last;
   userCardImg.src = user.photoURL;
-
 };
 
-const storedUserString = sessionStorage.getItem('user');
+const storedUserString = localStorage.getItem('user');
 
 if (storedUserString) {
   userInfo = JSON.parse(storedUserString);
   loadUserInfoCard(userInfo);
+  signInGoogleBtn.classList.toggle('hidden');
+  signOutBtn.classList.toggle('hidden');
   // Ya puedes usar user.uid, user.email, etc.
 } else {
   // No hay sesión activa
+  showSection(accountSectionEle);
+
 }
 
 
@@ -215,16 +230,16 @@ function handleLogin() {
         console.log('Nombre:', currentUser.displayName);
         console.log('Foto de perfil:', currentUser.photoURL);
 
-        // Guardar los datos del usuario en sessionStorage
-        sessionStorage.setItem('user', JSON.stringify({
+        // Guardar los datos del usuario en localStorage
+        localStorage.setItem('user', JSON.stringify({
           uid: currentUser.uid,
           email: currentUser.email,
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL
         }));
-        userInfo = JSON.parse(sessionStorage.getItem('user'));
+        userInfo = JSON.parse(localStorage.getItem('user'));
         loadUserInfoCard(userInfo);
-        alert('info loaded');
+        //alert('info loaded');
 
       } else {
         // No hay ningún usuario autenticado
@@ -406,10 +421,19 @@ startTripBtn.addEventListener('click', () => {
 
 // sign in with google btn
 
-document.getElementById('sign-in-google-btn').addEventListener('click', () =>{
+signInGoogleBtn.addEventListener('click', () =>{
   handleLogin();
+  signOutBtn.classList.toggle('hidden');
+  signInGoogleBtn.classList.toggle('hidden');
 });
 
-document.getElementById('show-user-btn').addEventListener('click', () => {
-  //handleRedirectResult();
+signOutBtn.addEventListener('click', () => {
+  signOutUser();
+  localStorage.removeItem('user');
+  userInfo = null;
+  loadUserInfoCard(null);
+  signInGoogleBtn.classList.toggle('hidden');
+  signOutBtn.classList.toggle('hidden');
 });
+
+

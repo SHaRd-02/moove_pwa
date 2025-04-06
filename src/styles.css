@@ -406,6 +406,10 @@ body{
     width: 90%;
 }
 
+#sign-out-btn{
+    background-color: red;
+}
+
 /* Media query para pantallas más grandes que un smartphone */
 @media (min-width: 600px) {
 
