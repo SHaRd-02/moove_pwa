@@ -91,6 +91,29 @@ function loadUserInfoCard(user){
 
 const storedUID = localStorage.getItem('uid');
 
+// Verifica si hay un UID guardado en localStorage
+if (storedUID) {
+  // Si existe, intenta obtener el usuario desde Firebase
+  auth.onAuthStateChanged(user => {
+    if (user && user.uid === storedUID) {
+      userInfo = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      };
+      loadUserInfoCard(userInfo);
+      signInGoogleBtn.classList.add('hidden');
+      signOutBtn.classList.remove('hidden');
+    } else {
+      console.log('No se pudo autenticar al usuario con el UID guardado');
+      localStorage.removeItem('uid'); // Limpiar el UID si no se pudo autenticar
+    }
+  });
+} else {
+  console.log('No hay UID en localStorage');
+}
+
 
 
 
@@ -215,8 +238,6 @@ function handleLogin() {
 
         // Guardar solo el UID en localStorage
         localStorage.setItem('uid', uid);
-
-        
 
         userInfo = { uid, email, displayName, photoURL };
         loadUserInfoCard(userInfo);
