@@ -3,7 +3,7 @@
     --button-color: #BD93F9;
     --foreground-color: #F8F8F2; 
     --background-color: #282A36; 
-    --ui-bg-color: #44475A; 
+    --ui-bg-color: #44475a; 
     --secondary-color: pink;
     --navbar-color: #6272A4;
     --water-color: #4a69c6;
@@ -11,6 +11,35 @@
     --card-body: #899E8B;
     --card-banner: #2cc04c;
     --card-left: #706C61;
+}
+
+
+::-webkit-scrollbar{
+	width: 5px;
+    height: 100%;
+    margin-right: 5px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track-piece{
+	background-color: rgba(74, 105, 198, 0.3);
+    border-radius: 10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+	background-color: #CBCBCB;
+	outline: 2px solid #FFF;
+	outline-offset: -2px;
+	border: .1px solid #B7B7B7;
+    border-radius: 10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+	background-color: #909090;
+    border-radius: 10px;
+
 }
 
 
@@ -22,6 +51,7 @@ html, body {
     width: 100%;
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-y: hidden;
     background-color: var(--background-color) !important;
     color: var(--foreground-color);
     font-family: "Rubik", sans-serif;
@@ -31,10 +61,7 @@ html, body {
 }
 
 body{
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
+   
     background-color: var(--background-color);
 
 }
@@ -47,7 +74,7 @@ body{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    position: relative;
+    position: absolute;
     bottom: 0;
     background-color: var(--navbar-color);
     border-radius: 25px 25px 0 0 ;
@@ -81,6 +108,7 @@ body{
     height: 100%;
     width: 100%;
     background-color: var(--background-color);
+    overflow-y: scroll;
 }
 
 #search-bar-div{
@@ -147,6 +175,8 @@ body{
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
+    margin-top: 50px;
+
 }
 
 #select-route{
@@ -190,6 +220,7 @@ body{
 
 #routes-info-div{
     width: 90%;
+    height: 60%;
     border: 1px white;
     border-radius: 10px;
     display: flex;
@@ -313,6 +344,10 @@ body{
     color: var(--foreground-color);
 }
 
+#start-trip-btn{
+    margin-bottom: 40px;
+}
+
 .big-btn{
     margin-top: 30px;
     display: flex;
@@ -404,6 +439,10 @@ body{
 
 .user-card-input{
     width: 90%;
+}
+
+#sign-out-btn{
+    background-color: red;
 }
 
 /* Media query para pantallas más grandes que un smartphone */

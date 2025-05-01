@@ -2,7 +2,7 @@
 
 // Importar las funciones necesarias de Firebase
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signOut as firebaseSignOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 // Configuración de Firebase (reemplaza esto con tus claves reales)
@@ -17,7 +17,6 @@ const firebaseConfig = {
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-
 // Inicializar Firebase Authentication y Firestore
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -57,5 +56,8 @@ const getUserFromRedirect = () => {
     });
 };
 
+const signOutUser = () => firebaseSignOut(auth);
+
+
 // Exportar las funciones necesarias
-export { auth, db, provider, signInWithGoogle, getUserFromRedirect };
+export { auth, db, provider, signInWithGoogle, getUserFromRedirect, signOutUser };
