@@ -157,6 +157,7 @@ window.initMap = function (lati, longi) {
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(success, error);
+    
   } else {
     alert("Browser not supported");
   }
@@ -326,7 +327,7 @@ startTripBtn.addEventListener('click', () => {
     navigator.geolocation.getCurrentPosition(
       position => {
         const userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        const tolerance = 20 / 111320; // 20 metros en grados
+        const tolerance = 200 / 111320; // 200 metros en grados
 
         const isNearRoute = google.maps.geometry.poly.isLocationOnEdge(userLocation, new google.maps.Polyline({ path: currentRoutePath }), tolerance);
 
@@ -376,7 +377,7 @@ startTripBtn.addEventListener('click', () => {
           );
         } else {
           // El usuario está fuera del radio permitido
-          alert("Debes estar dentro de 20 metros de la ruta para iniciar el viaje.");
+          alert("Debes estar dentro de 200 metros de la ruta para iniciar el viaje.");
         }
       },
       error => {
