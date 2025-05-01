@@ -162,6 +162,21 @@ window.initMap = function (lati, longi) {
       ]
     });
 
+    // Dibuja un marcador para la ubicación del usuario
+    const userMarker = new google.maps.Marker({
+        position: { lat: lati, lng: longi },
+        map: map,
+        title: "Tu ubicación",
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#4285F4", // Azul Google
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#ffffff",
+        }
+    });
+
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer({
       map: map,
@@ -180,7 +195,7 @@ window.initMap = function (lati, longi) {
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(success, error);
-    
+
   } else {
     alert("Browser not supported");
   }
@@ -351,7 +366,7 @@ startTripBtn.addEventListener('click', () => {
         const tolerance = 200 / 111320; // 200 metros en grados
 
         const isNearRoute = google.maps.geometry.poly.isLocationOnEdge(userLocation, new google.maps.Polyline({ path: currentRoutePath }), tolerance);
-
+        console.log()
         if (isNearRoute) {
           // El usuario está dentro del radio permitido, iniciar el viaje
           startTripBtn.disabled = true;
