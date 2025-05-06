@@ -363,7 +363,7 @@ startTripBtn.addEventListener('click', () => {
     navigator.geolocation.getCurrentPosition(
       position => {
         const userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        const tolerance = 200 / 111320; // 200 metros en grados
+        const tolerance = 2000 / 111320; // 200 metros en grados
 
         const isNearRoute = google.maps.geometry.poly.isLocationOnEdge(userLocation, new google.maps.Polyline({ path: currentRoutePath }), tolerance);
         console.log()
