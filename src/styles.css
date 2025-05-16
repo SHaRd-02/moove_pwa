@@ -81,6 +81,7 @@ body{
     background-color: var(--navbar-color);
     border-radius: 25px 25px 0 0 ;
     border-bottom: solid 10px var(--navbar-color);
+    z-index: 20;
 
 }
 
@@ -107,11 +108,12 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100svh;
+    height: 90%;
     width: 100%;
     background-color: var(--background-color);
     overflow-y: scroll;
     margin-bottom: 100px;
+ 
 }
 
 #search-bar-div{

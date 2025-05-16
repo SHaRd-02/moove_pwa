@@ -3,7 +3,7 @@
 // Importar las funciones necesarias de Firebase
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signOut as firebaseSignOut } from "firebase/auth";
-import { getFirestore, collection, addDoc, Timestamp, getDocs, query, orderBy, deleteDoc, doc  } from "firebase/firestore";
+import { getFirestore, collection, addDoc, Timestamp, getDocs, query, orderBy, deleteDoc, doc, onSnapshot, updateDoc  } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 
 
@@ -64,4 +64,4 @@ const storage = getStorage();
 
 
 // Exportar las funciones necesarias
-export { auth, db, provider, signInWithGoogle, getUserFromRedirect, signOutUser, Timestamp, addDoc, collection, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc };
+export { auth, db, provider, signInWithGoogle, getUserFromRedirect, signOutUser, Timestamp, addDoc, collection, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc, onSnapshot, updateDoc };

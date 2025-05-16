@@ -1,6 +1,6 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
-import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc } from './firebase.js';
+import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc, onSnapshot, updateDoc } from './firebase.js';
 
 
 // DOM elements
@@ -150,6 +150,7 @@ window.initMap = function (lati, longi) {
         center: { lat: lati, lng: longi }, // Coordenadas de la UABC Valle de las Palmas
         zoom: zoomLevel,
         disableDefaultUI: true,
+        mapId: "5eed15a35a30402da2d94b42", // ← Esto es lo importante
         styles: [
           {
               elementType: "geometry",
@@ -214,7 +215,43 @@ window.initMap = function (lati, longi) {
         strokeWeight: 5,
       }
     });
-
+        // Mostrar los buses en cuanto se abre el mapa
+        onSnapshot(collection(db, "buses"), (snapshot) => {
+          snapshot.docChanges().forEach(change => {
+            const busData = change.doc.data();
+            const busId = change.doc.id;
+    
+            if (!window.busMarkers) {
+              window.busMarkers = new Map();
+            }
+    
+            if (change.type === "removed") {
+              if (window.busMarkers.has(busId)) {
+                window.busMarkers.get(busId).setMap(null);
+                window.busMarkers.delete(busId);
+              }
+            } else {
+              const position = { lat: busData.lat, lng: busData.lng };
+    
+              if (window.busMarkers.has(busId)) {
+                // Si el marcador ya existe, actualiza su posición
+                const marker = window.busMarkers.get(busId);
+                if (marker instanceof google.maps.marker.AdvancedMarkerElement) {
+                  marker.position = position;
+                } else if (marker.setPosition) {
+                  marker.setPosition(position);
+                }
+              } else {
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                  map,
+                  position,
+                  title: "Ubicación del transporte"
+                });
+                window.busMarkers.set(busId, marker);
+              }
+            }
+          });
+        });
 };
 
 
@@ -228,6 +265,56 @@ function getLocation() {
     alert("Browser not supported");
   }
 }
+
+
+// ========================
+// Funciones de ubicación/transporte
+// ========================
+
+const busesCollection = collection(db, 'buses');
+
+function calculateDistanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000; // Radio de la tierra en metros
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+async function compartirUbicacionTransporte(userId, lat, lng) {
+  const snapshot = await getDocs(busesCollection);
+  let busEncontrado = null;
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const distancia = calculateDistanceMeters(lat, lng, data.lat, data.lng);
+    if (distancia < 3) {
+      busEncontrado = doc.id;
+    }
+  });
+
+  if (busEncontrado) {
+    const busDoc = doc(db, 'buses', busEncontrado);
+    await updateDoc(busDoc, {
+      lastUpdated: Timestamp.now()
+    });
+  } else {
+    await addDoc(busesCollection, {
+      lat,
+      lng,
+      createdBy: userId,
+      lastUpdated: Timestamp.now()
+    });
+  }
+}
+
+// Puedes llamar esta función dentro del watchPosition del botón de iniciar viaje:
+// compartirUbicacionTransporte(userInfo.uid, position.coords.latitude, position.coords.longitude);
 
 function success(position) {
     const lati = position.coords.latitude; 
@@ -475,7 +562,7 @@ startTripBtn.addEventListener('click', () => {
     navigator.geolocation.getCurrentPosition(
       position => {
         const userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        const tolerance = 2000 / 111320; // 200 metros en grados
+        const tolerance = 20000 / 111320; // 200 metros en grados
 
         const isNearRoute = google.maps.geometry.poly.isLocationOnEdge(userLocation, new google.maps.Polyline({ path: currentRoutePath }), tolerance);
         console.log()
@@ -523,6 +610,7 @@ startTripBtn.addEventListener('click', () => {
               timeout: 5000
             }
           );
+          compartirUbicacionTransporte(userInfo.uid, position.coords.latitude, position.coords.longitude);
         } else {
           // El usuario está fuera del radio permitido
           alert("Debes estar dentro de 200 metros de la ruta para iniciar el viaje.");
