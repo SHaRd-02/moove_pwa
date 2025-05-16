@@ -462,12 +462,14 @@ body{
 
 #add-news-modal{
     background-color: var(--news-div);
-    height: 100svh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     border-radius: 0;
     border: none;
     overflow-x: hidden;
     margin: 0;
+    padding-right: 30px;
+    padding-bottom: 30px;
 
 }
 
