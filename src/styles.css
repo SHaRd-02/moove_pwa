@@ -462,8 +462,8 @@ body{
 
 #add-news-modal{
     background-color: var(--news-div);
-    height: 500px;
-    width: 80%;
+    height: 100svh;
+    width: 100vw;
     border-radius: 10px;
 
 }
@@ -597,6 +597,9 @@ h3{
     background-color: var(--foreground-color);
     border: solid 0.5px rgba(255, 255, 255, 0.3);
 }
+input, textarea, select {
+    font-size: 16px;
+  }
 
 h6{
     display: inline-block;
