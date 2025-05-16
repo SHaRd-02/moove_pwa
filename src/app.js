@@ -119,7 +119,9 @@ const storedUID = localStorage.getItem('uid');
 if (storedUID) {
   // Si existe, intenta obtener el usuario desde Firebase
   auth.onAuthStateChanged(user => {
-    if (user && user.uid === storedUID) {
+    if (user) {
+      // El usuario ya está autenticado por Firebase
+      localStorage.setItem('uid', user.uid); // Guardar por si lo necesitas después
       userInfo = {
         uid: user.uid,
         email: user.email,
@@ -130,9 +132,10 @@ if (storedUID) {
       signInGoogleBtn.classList.add('hidden');
       signOutBtn.classList.remove('hidden');
     } else {
-      
-      console.log('No se pudo autenticar al usuario con el UID guardado');
-      localStorage.removeItem('uid'); // Limpiar el UID si no se pudo autenticar
+      console.log('Usuario no autenticado');
+      localStorage.removeItem('uid'); // Limpia cualquier UID guardado
+      signInGoogleBtn.classList.remove('hidden');
+      signOutBtn.classList.add('hidden');
     }
   });
 } else {
@@ -271,10 +274,11 @@ async function displayNews() {
       divNoticia.innerHTML = `
         <div class="news-user-div">
           <img src="${noticia.pfpUrl || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" alt="Foto de perfil" class="news-pfp">
-          <h6>${noticia.author || 'Anónimo'}</h6>
+          
         </div>
          
         <div class="news-content-div">
+          <h6>${noticia.author || 'Anónimo'}</h6>
           <h5>${noticia.title}</h5>
           <p class="news-p">${noticia.body}</p>
           ${noticia.imageUrl ? `<img src="${noticia.imageUrl}" alt="Imagen de la noticia" class="news-photo">` : ''}
@@ -287,7 +291,12 @@ async function displayNews() {
 
   } catch (error) {
     console.error('Error loading news:', error);
-    newsDashboard.innerHTML = '<p>Error loading news.</p>';
+    if (error.code === 'permission-denied') {
+      newsDashboard.innerHTML = '<p>Inicia sesión para ver las noticias</p>';
+    } else {
+      newsDashboard.innerHTML = '<p>Error cargando noticias.</p>';
+    }
+   
   }
 }
   
@@ -544,11 +553,16 @@ publishNewsBtn.addEventListener('click', async () => {
 
   if (!title || !body) {
     alert("Por favor completa el título y el contenido de la noticia.");
+    publishNewsBtn.disabled = false;
     return;
   }
 
-  if (!storedUID){
-    alert("Para poder publicar primero hay que iniciar sesión")
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    alert("Debes iniciar sesión para publicar una noticia.");
+    publishNewsBtn.disabled = false;
+    return;
   }
 
   try {
@@ -565,10 +579,12 @@ publishNewsBtn.addEventListener('click', async () => {
     await addDoc(newsRef, {
       title,
       body,
-      author: userInfo?.displayName || "Anónimo",
+      author: currentUser.displayName || "Anónimo",
+      pfpUrl: currentUser.photoURL || null,  // ← Aquí se guarda la foto de perfil
+      uid: currentUser.uid,
       timestamp: Timestamp.now(),
       likes: 0,
-      imageUrl: imageUrl
+      imageUrl: imageUrl || null
     });
 
     alert('Noticia publicada correctamente.');
@@ -582,5 +598,5 @@ publishNewsBtn.addEventListener('click', async () => {
   }
 
   publishNewsBtn.disabled = false;
-  displayNews();
+  displayNews(); // Cargar las noticias actualizadas
 });

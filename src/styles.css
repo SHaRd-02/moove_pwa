@@ -455,8 +455,8 @@ body{
     color: var(--foreground-color);
     position: fixed;
     z-index: 2000;
-    bottom: 150px;
-    right: 30px;
+    bottom: 120px;
+    right: 10px;
     font-size: 40px;
 }
 
@@ -535,8 +535,8 @@ h3{
     border-bottom: solid 1px rgb(86, 86, 86);
     background-color: var(--ui-bg-color);
     padding-bottom: 20px;
-    top: -10px;
-    position: sticky;
+    top: -20px;
+    position: absolute;
     width: 100%;
     text-align: center;
     border: 1px red;
@@ -544,10 +544,12 @@ h3{
 }
 
 #news-section{
-    border:  1px blue;
-    height: 100svh;
+    border: 1px blue;
+    height: 80%;
     margin-bottom: 100px;
+    margin-top: 20%;
     overflow-y: hidden;
+    
 }
 
 #news-dashboard{
@@ -555,11 +557,6 @@ h3{
     border-radius: 10px;
     height: 90%;
     width: 100%;
-    margin-bottom: 130px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     overflow-y: scroll;
 
 }
@@ -569,19 +566,19 @@ h3{
     width: 95%;
     height: fit-content;
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     margin: 20px auto;
     padding: 5px;
-    border-bottom: solid 1px rgb(123, 123, 123);
+    border-bottom: solid 1px rgba(123, 123, 123, 0.2);
 
 }
 
 .news-user-div{
-    border:  1px blue;
-    width: 95%;
+    border: 1px blue;
+    width: 10%;
     height: 51px;
     display: flex;
     flex-direction: row;
@@ -597,16 +594,18 @@ h3{
     height: 40px;
     border-radius: 50%;
     display: inline-block;
-    background-color: var(--card-left);
+    background-color: var(--foreground-color);
+    border: solid 0.5px rgba(255, 255, 255, 0.3);
 }
 
 h6{
     display: inline-block;
-    padding: 5px;
-    font-weight: 400;
-    font-size: 14px;
-    color: lightgrey;
-    margin-left: 10px;
+    padding: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--water-color);
+    margin: 0;
+    margin-top: 8px;
 }
 
 .news-timestamp{
@@ -622,32 +621,37 @@ h6{
 
 
 .news-content-div{
-    border:  1px red;
-    width: 95%;
+    border: 1px red;
+    width: 90%;
     height: fit-content;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    padding: 2px;
+    padding: 0 2px;
     margin-bottom: 10px;
+    padding-left: 5px;
 }
 
 h5{
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 .news-p{
     width: 95%;
     text-align: left;
     height: fit-content;
+    margin: 0;
 
 }
 
 .news-photo{
-    max-width: 95%;
-    height: 150px;
-    margin: 0 auto;
+    width: 95%;
+    height: auto; /* Mantiene el aspecto */
+    object-fit: cover; /* O usa 'contain' si no quieres recortar */
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
 
