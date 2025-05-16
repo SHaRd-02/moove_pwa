@@ -215,53 +215,8 @@ window.initMap = function (lati, longi) {
         strokeWeight: 5,
       }
     });
-        // Mostrar los buses en cuanto se abre el mapa
-        onSnapshot(collection(db, "buses"), (snapshot) => {
-          snapshot.docChanges().forEach(change => {
-            const busData = change.doc.data();
-            const busId = change.doc.id;
-    
-            if (!window.busMarkers) {
-              window.busMarkers = new Map();
-            }
-    
-            if (change.type === "removed") {
-              if (window.busMarkers.has(busId)) {
-                window.busMarkers.get(busId).setMap(null);
-                window.busMarkers.delete(busId);
-              }
-            } else {
-              const position = { lat: busData.lat, lng: busData.lng };
-    
-              if (window.busMarkers.has(busId)) {
-                // Si el marcador ya existe, actualiza su posición
-                const marker = window.busMarkers.get(busId);
-                if (marker instanceof google.maps.marker.AdvancedMarkerElement) {
-                  marker.position = position;
-                } else if (marker.setPosition) {
-                  marker.setPosition(position);
-                }
-              } else {
-                const busIconUrl = "https://cdn-icons-png.flaticon.com/512/5030/5030991.png"; // tu icono de bus
-
-                
-                const img = document.createElement("img");
-                img.src = busIconUrl;
-                img.style.width = "40px";
-                img.style.height = "40px";
-                img.alt = "Bus icon";
-
-                const marker = new google.maps.marker.AdvancedMarkerElement({
-                  map,
-                  position,
-                  title: "Ubicación del transporte",
-                  content: img,  // aquí va el nodo DOM, no string
-                });
-                window.busMarkers.set(busId, marker);
-              }
-            }
-          });
-        });
+    // Mostrar los buses usando la función personalizada
+    limpiarYMostrarBuses();
 };
 
 
@@ -730,3 +685,74 @@ publishNewsBtn.addEventListener('click', async () => {
   publishNewsBtn.disabled = false;
   displayNews(); // Cargar las noticias actualizadas
 });
+
+
+// Función para limpiar y mostrar los buses con ícono personalizado y borrado automático
+async function limpiarYMostrarBuses() {
+  const busIconUrl = "https://cdn-icons-png.flaticon.com/512/5030/5030991.png";
+  const busIconSize = { width: 40, height: 40 };
+  if (!window.busMarkers) {
+    window.busMarkers = new Map();
+  }
+
+  onSnapshot(collection(db, "buses"), async (snapshot) => {
+    // Para cada documento en la colección de buses
+    const now = Date.now();
+    for (const change of snapshot.docChanges()) {
+      const docRef = change.doc.ref;
+      const busData = change.doc.data();
+      const busId = change.doc.id;
+
+      // Eliminar buses con lastUpdated > 1 minuto (60,000 ms)
+      if (busData.lastUpdated && busData.lastUpdated.toMillis) {
+        const lastUpdatedMillis = busData.lastUpdated.toMillis();
+        if (now - lastUpdatedMillis > 60000) {
+          // Eliminar el documento de Firestore
+          await deleteDoc(docRef);
+          // Eliminar el marcador del mapa si existe
+          if (window.busMarkers.has(busId)) {
+            window.busMarkers.get(busId).setMap(null);
+            window.busMarkers.delete(busId);
+          }
+          continue;
+        }
+      }
+
+      if (change.type === "removed") {
+        if (window.busMarkers.has(busId)) {
+          window.busMarkers.get(busId).setMap(null);
+          window.busMarkers.delete(busId);
+        }
+      } else {
+        const position = { lat: busData.lat, lng: busData.lng };
+        // Crear ícono personalizado para AdvancedMarkerElement
+        const iconImg = document.createElement("img");
+        iconImg.src = busIconUrl;
+        iconImg.width = busIconSize.width;
+        iconImg.height = busIconSize.height;
+        iconImg.style.width = `${busIconSize.width}px`;
+        iconImg.style.height = `${busIconSize.height}px`;
+        iconImg.style.objectFit = "contain";
+
+        if (window.busMarkers.has(busId)) {
+          // Si el marcador ya existe, actualiza su posición
+          const marker = window.busMarkers.get(busId);
+          if (marker instanceof google.maps.marker.AdvancedMarkerElement) {
+            marker.position = position;
+            marker.content = iconImg;
+          } else if (marker.setPosition) {
+            marker.setPosition(position);
+          }
+        } else {
+          const marker = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: position,
+            title: "Ubicación del transporte",
+            content: iconImg
+          });
+          window.busMarkers.set(busId, marker);
+        }
+      }
+    }
+  });
+}
