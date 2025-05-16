@@ -1,6 +1,6 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
-import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db } from './firebase.js';
+import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy } from './firebase.js';
 
 
 // DOM elements
@@ -8,10 +8,12 @@ import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db } from './
 const searchSectionBtn = document.getElementById('search-section-btn');
 const newsSectionBtn = document.getElementById('news-section-btn');
 const accountSectionBtn = document.getElementById('account-section-btn');
+
 // sections elements
 const accountSectionEle = document.getElementById('account-section');
 const newsSectionEle = document.getElementById('news-section');
 const searchSectionEle = document.getElementById('search-section');
+
 // select route elements
 const selectRouteEle = document.getElementById('select-route');
 const selectRouteBtn = document.getElementById('select-route-btn');
@@ -24,12 +26,25 @@ const routeEtaEle = document.getElementById('route-eta');
 const startTripBtn = document.getElementById('start-trip-btn');
 console.log("startTripBtn:", startTripBtn);
 // card user elements
+const userCardDiv = document.getElementById('user-card-div');
+const loaderEle = document.getElementById('loader-div');
 const userCardImg = document.getElementById('user-card-img');
 const userCardName = document.getElementById('user-card-name');
 const userCardMiddleName = document.getElementById('user-card-middle-name');
 const userCardLastname = document.getElementById('user-card-lastname');
 const signOutBtn = document.getElementById('sign-out-btn'); 
 const signInGoogleBtn = document.getElementById('sign-in-google-btn');
+
+//news section
+const addNewsBtn = document.getElementById('add-news-btn');
+const addNewsModal = document.getElementById('add-news-modal');
+const newsCloseModalBtn = document.getElementById('news-close-modal-btn');
+const newsDashboard = document.getElementById('news-dashboard');
+const publishNewsBtn = document.getElementById('publish-news-btn');
+const newsTextBodyInput= document.getElementById('news-text-body-input');
+const newsTitleInput = document.getElementById('news-title-input');
+
+const newsList = []
 
 
 // Function to show a section
@@ -43,6 +58,9 @@ function showSection(selected) {
     // Show the selected section
     selected.classList.remove('hidden');
 }
+
+
+
 
 
 // global colors
@@ -86,7 +104,12 @@ function loadUserInfoCard(user){
   userCardName.value = name;
   userCardMiddleName.value = middle;
   userCardLastname.value = last;
-  userCardImg.src = user.photoURL;
+  if (user.photoURL !== null){
+    userCardImg.src = user.photoURL;
+    console.log(user.photoURL)
+    console.log(userCardImg.src)
+  }
+
 };
 
 const storedUID = localStorage.getItem('uid');
@@ -106,6 +129,7 @@ if (storedUID) {
       signInGoogleBtn.classList.add('hidden');
       signOutBtn.classList.remove('hidden');
     } else {
+      
       console.log('No se pudo autenticar al usuario con el UID guardado');
       localStorage.removeItem('uid'); // Limpiar el UID si no se pudo autenticar
     }
@@ -224,18 +248,47 @@ async function solicitarPermiso() {
   };
 solicitarPermiso();
 
-async function suscribirse() {
-    const registro = await navigator.serviceWorker.ready;
-    const suscripcion = await registro.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: 'BBswnwYK1ainOyoSKM-kQ6Dx7-rz35pItXaKp-N_OQoRAjjl040Jax0nYE4qJDBMcdYAhIHGlcBY3OTj27Za61A',
+
+// news section functions
+
+// function to load news into the news dashboard
+
+
+async function displayNews() {
+  newsDashboard.innerHTML = ''; // Clear previous content
+
+  try {
+    const newsQuery = query(collection(db, 'news'), orderBy('timestamp', 'desc'));
+    const querySnapshot = await getDocs(newsQuery);
+
+    querySnapshot.forEach(doc => {
+      const noticia = doc.data();
+
+      const divNoticia = document.createElement('div');
+      divNoticia.className = 'news-div';
+
+      divNoticia.innerHTML = `
+        <div class="news-user-div">
+          <img src="${noticia.pfpUrl || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" alt="Foto de perfil" class="news-pfp">
+          <h6>${noticia.author || 'Anónimo'}</h6>
+        </div>
+         
+        <div class="news-content-div">
+          <h5>${noticia.title}</h5>
+          <p class="news-p">${noticia.body}</p>
+          ${noticia.imageUrl ? `<img src="${noticia.imageUrl}" alt="Imagen de la noticia" class="news-photo">` : ''}
+          <div class="news-timestamp">${noticia.timestamp?.toDate().toLocaleString() || ''}</div>
+        </div>
+      `;
+
+      newsDashboard.appendChild(divNoticia);
     });
-  
-    console.log('Suscripción:', JSON.stringify(suscripcion));
-    // Aquí envías la suscripción al servidor para almacenarla
+
+  } catch (error) {
+    console.error('Error loading news:', error);
+    newsDashboard.innerHTML = '<p>Error loading news.</p>';
   }
-  
-suscribirse();
+}
   
 
 document.addEventListener("DOMContentLoaded", getLocation);
@@ -251,13 +304,28 @@ function handleLogin() {
       if (currentUser) {
         const { uid, email, displayName, photoURL } = currentUser;
 
-        // Guardar solo el UID en localStorage
-        localStorage.setItem('uid', uid);
 
-        userInfo = { uid, email, displayName, photoURL };
-        loadUserInfoCard(userInfo);
-        signInGoogleBtn.classList.add('hidden');
-        signOutBtn.classList.remove('hidden');
+        const emailDomain = email.split('@')
+        console.log(emailDomain)
+
+        if (emailDomain[1] === 'uabc.edu.mx'){
+          // Guardar solo el UID en localStorage
+          localStorage.setItem('uid', uid);
+          userInfo = { uid, email, displayName, photoURL };
+          loadUserInfoCard(userInfo);
+        
+          signInGoogleBtn.classList.add('hidden');
+          signOutBtn.classList.remove('hidden');
+        }else{
+          setTimeout(() => {
+            console.log('This runs after 2 seconds');
+          }, 2000);
+          alert('Correo no valido, solo se permiten correos instutucionales de UABC')
+        }
+        
+        userCardDiv.classList.toggle('hidden');
+        loaderEle.classList.toggle('hidden');
+        
       }
     })
     .catch((error) => {
@@ -287,11 +355,13 @@ accountSectionBtn.addEventListener('click', () => {
 
 newsSectionBtn.addEventListener('click', () => {
     showSection(newsSectionEle);
+    displayNews();
 });
 
 searchSectionBtn.addEventListener('click', () => {
     showSection(searchSectionEle);
 });
+
 
 // Event listener for select route
 let currentRoutePath = [];
@@ -436,8 +506,9 @@ startTripBtn.addEventListener('click', () => {
 
 signInGoogleBtn.addEventListener('click', () =>{
   handleLogin();
-  signOutBtn.classList.toggle('hidden');
-  signInGoogleBtn.classList.toggle('hidden');
+  userCardDiv.classList.toggle('hidden');
+  loaderEle.classList.toggle('hidden');
+  
 });
 
 signOutBtn.addEventListener('click', () => {
@@ -447,4 +518,64 @@ signOutBtn.addEventListener('click', () => {
   loadUserInfoCard(null);
   signInGoogleBtn.classList.toggle('hidden');
   signOutBtn.classList.toggle('hidden');
+});
+
+// news section events listeners
+
+addNewsBtn.addEventListener('click', () =>{
+  addNewsModal.showModal()
+});
+
+newsCloseModalBtn.addEventListener('click', () => {
+  addNewsModal.close()
+});
+
+//console.log("DB:", db);
+console.log('Tipo de db:', db.constructor.name);
+
+//import { collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"; // Asegúrate de tener esto
+
+publishNewsBtn.addEventListener('click', async () => {
+  const title = newsTitleInput.value.trim();
+  const body = newsTextBodyInput.value.trim();
+  const imageFile = document.getElementById('newsImageInput').files[0];
+  publishNewsBtn.disabled = true;
+
+  if (!title || !body) {
+    alert("Por favor completa el título y el contenido de la noticia.");
+    return;
+  }
+
+  try {
+    let imageUrl = null;
+
+    if (imageFile) {
+      const imageRef = ref(storage, `news-images/${Date.now()}_${imageFile.name}`);
+      await uploadBytes(imageRef, imageFile);
+      imageUrl = await getDownloadURL(imageRef);
+    }
+
+    const newsRef = collection(db, 'news');
+
+    await addDoc(newsRef, {
+      title,
+      body,
+      author: userInfo?.displayName || "Anónimo",
+      timestamp: Timestamp.now(),
+      likes: 0,
+      imageUrl: imageUrl
+    });
+
+    alert('Noticia publicada correctamente.');
+    newsTitleInput.value = '';
+    newsTextBodyInput.value = '';
+    document.getElementById('newsImageInput').value = '';
+    addNewsModal.classList.add('hidden');
+  } catch (error) {
+    console.error("Error al guardar la noticia:", error);
+    alert('Error al publicar la noticia. Intenta de nuevo.');
+  }
+
+  publishNewsBtn.disabled = False;
+
 });

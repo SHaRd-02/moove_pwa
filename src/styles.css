@@ -11,6 +11,7 @@
     --card-body: #899E8B;
     --card-banner: #2cc04c;
     --card-left: #706C61;
+    --news-div: #262834;
 }
 
 
@@ -48,7 +49,7 @@ html, body {
     padding: 0;
     border: 0;
     height: 100%;
-    width: 100%;
+    width: 100vw;
     scroll-behavior: smooth;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -105,10 +106,11 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 85%;
+    height: 100svh;
     width: 100%;
     background-color: var(--background-color);
     overflow-y: scroll;
+    margin-bottom: 100px;
 }
 
 #search-bar-div{
@@ -444,6 +446,228 @@ body{
 #sign-out-btn{
     background-color: red;
 }
+
+#add-news-btn{
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    background-color: var(--button-color);
+    color: var(--foreground-color);
+    position: fixed;
+    z-index: 2000;
+    bottom: 150px;
+    right: 30px;
+    font-size: 40px;
+}
+
+#add-news-modal{
+    background-color: var(--news-div);
+    height: 500px;
+    width: 80%;
+    border-radius: 10px;
+
+}
+
+#news-close-modal-btn{
+    display: block;
+    margin-left: 90%;
+    background-color: transparent;
+    border: none;
+    color: var(--foreground-color);
+    font-size: 15px;
+    padding: 0px;
+    font-size: 30px;
+
+}
+
+#news-title-input{
+    display: block;
+    height: 2em;
+    width: 90%;
+    margin: 10px auto;
+    background-color: var(--ui-bg-color);
+    border-radius: 6px;
+    border: 1px white solid;
+    color: var(--foreground-color);
+
+
+}
+
+#news-text-body-input{
+    width: 90%;
+    height: 40%;
+    margin: 10px auto;
+    margin-left: 10px;
+    background-color: var(--ui-bg-color);
+    border-radius: 10px;
+    border: 1px white solid;
+    color: var(--foreground-color);
+
+}
+
+#img-add-label{
+    color: var(--foreground-color);
+    display: block;
+    margin: 10px;
+}
+
+#newsImageInput{
+    color: var(--foreground-color);
+}
+
+
+
+
+
+#publish-news-btn{
+    background-color: var(--button-color);
+    margin: 30px auto;
+}
+
+h3{
+    color: var(--foreground-color);
+}
+
+
+
+
+#news-section > h1{
+    border-bottom: solid 1px rgb(86, 86, 86);
+    background-color: var(--ui-bg-color);
+    padding-bottom: 20px;
+    top: -10px;
+    position: sticky;
+    width: 100%;
+    text-align: center;
+    border: 1px red;
+    border-top: solid var(--ui-bg-color) 20px;
+}
+
+#news-section{
+    border: 1px blue;
+    height: 100svh;
+    margin-bottom: 100px;
+}
+
+#news-dashboard{
+    border: 1px white;
+    border-radius: 10px;
+    height: fit-content;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 500px;
+    border-bottom: solid 1px rgb(123, 123, 123);
+
+}
+
+.news-div{
+    border: 1px lightgray;
+    width: 95%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 20px auto;
+    padding: 5px;
+    border-bottom: solid 1px rgb(123, 123, 123);
+
+}
+
+.news-user-div{
+    border:  1px blue;
+    width: 95%;
+    height: 51px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2px;
+    margin-bottom: 10px;
+}
+
+.news-pfp{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: var(--card-left);
+}
+
+h6{
+    display: inline-block;
+    padding: 5px;
+    font-weight: 400;
+    font-size: 14px;
+    color: lightgrey;
+    margin-left: 10px;
+}
+
+.news-timestamp{
+    margin-top: 5px;
+    border: 1px yellow;
+    font-size: 10px;
+    width: 100%;
+    text-justify: right;
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(180, 180, 180);
+}
+
+
+.news-content-div{
+    border:  1px red;
+    width: 95%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 2px;
+    margin-bottom: 10px;
+}
+
+h5{
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.news-p{
+    width: 95%;
+    text-align: left;
+    height: fit-content;
+
+}
+
+.news-photo{
+    max-width: 95%;
+    height: 150px;
+    margin: 0 auto;
+}
+
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+  
+
 
 /* Media query para pantallas más grandes que un smartphone */
 @media (min-width: 600px) {

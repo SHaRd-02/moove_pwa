@@ -118,9 +118,40 @@
     <!-- news page -->
     <section id="news-section" class="sections hidden">
 
-        <h1>News section</h1>
+        <h1>Noticias</h1>
 
-        
+        <div id="news-dashboard">
+
+            <div class="news-div">
+                <div class="news-user-div">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5FV2oJ9b6YmXcgIKzBfkJSByk37RB1U3Mrg&s" alt="" class="news-pfp">
+                    <h6>Ricardo Hernandez Saldaña</h6>
+                </div>
+                <div class="news-timestamp">May 15, 2025 at 8:11:52 PM UTC-7</div>
+                <div class="news-content-div">
+                    <h5>Choque en 5 y 10</h5>
+                    <p class="news-p">
+                        Hola compañeros, solo para avisar que hubo un choque en 5 y 10, a la altura del puente. Tomen sus precauciones.
+                    </p>
+                    <img src="https://www.excelsior.com.mx/800x600/filters:format(webp):quality(75)/media/pictures/2025/05/14/3307459.jpg" alt="" class="news-photo">
+                </div>
+
+            </div>
+
+        </div>
+
+        <button id="add-news-btn">+</button>
+        <!-- add news modal -->
+        <dialog class="modal" id="add-news-modal">
+            <button id="news-close-modal-btn"><i class="fa-solid fa-square-xmark"></i></button>
+            <h3>Titulo</h3>
+            <input type="text" placeholder="" id="news-title-input">
+            <h3>Contenido</h3>
+            <textarea name="" id="news-text-body-input"></textarea>
+            <label for="newsImageInput" id="img-add-label">Añadir imagen</i></label>
+            <input type="file" id="newsImageInput" accept="image/*" />
+            <button class="big-btn" id="publish-news-btn">Publicar</button>
+        </dialog>
 
     </section>
 
@@ -152,6 +183,8 @@
             </div>
         </div>
         
+        <div class="loader hidden" id="loader-div"></div>
+
         <button type="button" class="big-btn" id="sign-in-google-btn"> <img src="https://img.icons8.com/?size=512&id=17949&format=png" alt="" style="height: 30px; width: 30px;"> Sign in with Google</button>
         <button type="button" class="big-btn hidden" id="sign-out-btn">Log out</button>
         
@@ -159,6 +192,7 @@
     </section>
     <script src="src/app.js" type="module"></script>
     <script type="module" src="src/firebase.js"></script>
+   <!-- <script type="module" src="src/test.js"></script> --> 
     
 </body>
 </html>
