@@ -12,6 +12,7 @@
     --card-banner: #2cc04c;
     --card-left: #706C61;
     --news-div: #262834;
+    --delete-btn: rgb(191, 23, 23); 
 }
 
 
@@ -663,6 +664,38 @@ h5{
     border-radius: 8px;
     margin-top: 10px;
 }
+
+.edit-btn{
+    background-color: var(--card-banner);
+    color: var(--foreground-color);
+}
+
+.delete-btn{
+    background-color: var(--delete-btn);
+    color: var(--foreground-color);
+}
+
+.delete-btn, .edit-btn{
+    border-radius: 4px;
+    padding: 2px;
+    width: 10em;
+    margin-top: 20px;
+}
+
+.news-act-details{
+    border: 1px blueviolet;
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+.news-act-details > summary {
+    list-style: none; /* Asegura que no se aplique el marcador */
+    font-size: 20px;
+    font-weight: 600;
+    word-spacing: 10px;
+    color: var(--button-color);
+  }
+
 
 
 .loader {

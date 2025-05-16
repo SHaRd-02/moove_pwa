@@ -1,6 +1,6 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
-import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy } from './firebase.js';
+import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc } from './firebase.js';
 
 
 // DOM elements
@@ -260,6 +260,7 @@ solicitarPermiso();
 
 async function displayNews() {
   newsDashboard.innerHTML = ''; // Clear previous content
+  const currentUID = localStorage.getItem('uid'); // UID del usuario autenticado
 
   try {
     const newsQuery = query(collection(db, 'news'), orderBy('timestamp', 'desc'));
@@ -267,6 +268,7 @@ async function displayNews() {
 
     querySnapshot.forEach(doc => {
       const noticia = doc.data();
+      const noticiaID = doc.id;
 
       const divNoticia = document.createElement('div');
       divNoticia.className = 'news-div';
@@ -274,7 +276,6 @@ async function displayNews() {
       divNoticia.innerHTML = `
         <div class="news-user-div">
           <img src="${noticia.pfpUrl || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" alt="Foto de perfil" class="news-pfp">
-          
         </div>
          
         <div class="news-content-div">
@@ -283,10 +284,42 @@ async function displayNews() {
           <p class="news-p">${noticia.body}</p>
           ${noticia.imageUrl ? `<img src="${noticia.imageUrl}" alt="Imagen de la noticia" class="news-photo">` : ''}
           <div class="news-timestamp">${noticia.timestamp?.toDate().toLocaleString() || ''}</div>
+
+          ${
+            noticia.uid === currentUID
+              ? `<div class="news-actions">
+                  <details class ="news-act-details">
+                    <summary>...</summary>
+                    <button class="edit-btn" data-id="${noticiaID}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                    <button class="delete-btn" data-id="${noticiaID}"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                  </details>
+                 </div>`
+              : ''
+          }
         </div>
       `;
 
       newsDashboard.appendChild(divNoticia);
+    });
+
+    // Activar los botones
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        if (confirm('¿Seguro que quieres eliminar esta noticia?')) {
+          await deleteDoc(doc(db, 'news', id));
+          displayNews(); // Recargar noticias
+        }
+      });
+    });
+
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        // Aquí puedes abrir un modal y cargar los datos actuales de la noticia con getDoc(...)
+        // Luego haces updateDoc(...)
+        alert(`Funcionalidad de edición pendiente para ID: ${id}`);
+      });
     });
 
   } catch (error) {
@@ -296,7 +329,6 @@ async function displayNews() {
     } else {
       newsDashboard.innerHTML = '<p>Error cargando noticias.</p>';
     }
-   
   }
 }
   
