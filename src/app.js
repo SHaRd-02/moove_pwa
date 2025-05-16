@@ -242,10 +242,20 @@ window.initMap = function (lati, longi) {
                   marker.setPosition(position);
                 }
               } else {
+                const busIconUrl = "https://cdn-icons-png.flaticon.com/512/5030/5030991.png"; // tu icono de bus
+
+                
+                const img = document.createElement("img");
+                img.src = busIconUrl;
+                img.style.width = "40px";
+                img.style.height = "40px";
+                img.alt = "Bus icon";
+
                 const marker = new google.maps.marker.AdvancedMarkerElement({
                   map,
                   position,
-                  title: "Ubicación del transporte"
+                  title: "Ubicación del transporte",
+                  content: img,  // aquí va el nodo DOM, no string
                 });
                 window.busMarkers.set(busId, marker);
               }
