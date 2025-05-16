@@ -43,6 +43,7 @@ const newsDashboard = document.getElementById('news-dashboard');
 const publishNewsBtn = document.getElementById('publish-news-btn');
 const newsTextBodyInput= document.getElementById('news-text-body-input');
 const newsTitleInput = document.getElementById('news-title-input');
+const loaderNews= document.getElementById('loader-news');
 
 const newsList = []
 
@@ -546,6 +547,10 @@ publishNewsBtn.addEventListener('click', async () => {
     return;
   }
 
+  if (!storedUID){
+    alert("Para poder publicar primero hay que iniciar sesión")
+  }
+
   try {
     let imageUrl = null;
 
@@ -576,6 +581,6 @@ publishNewsBtn.addEventListener('click', async () => {
     alert('Error al publicar la noticia. Intenta de nuevo.');
   }
 
-  publishNewsBtn.disabled = False;
-
+  publishNewsBtn.disabled = false;
+  displayNews();
 });

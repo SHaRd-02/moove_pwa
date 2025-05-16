@@ -544,23 +544,23 @@ h3{
 }
 
 #news-section{
-    border: 1px blue;
+    border:  1px blue;
     height: 100svh;
     margin-bottom: 100px;
+    overflow-y: hidden;
 }
 
 #news-dashboard{
     border: 1px white;
     border-radius: 10px;
-    height: fit-content;
-    width: 95%;
+    height: 90%;
+    width: 100%;
+    margin-bottom: 130px;
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    margin-top: 500px;
-    border-bottom: solid 1px rgb(123, 123, 123);
+    overflow-y: scroll;
 
 }
 
