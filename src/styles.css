@@ -464,7 +464,8 @@ body{
     background-color: var(--news-div);
     height: 100svh;
     width: 100vw;
-    border-radius: 10px;
+    border-radius: 0;
+    border: none;
     overflow-x: hidden;
     margin: 0;
 
