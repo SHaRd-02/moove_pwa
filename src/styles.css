@@ -225,7 +225,7 @@ body{
 
 #routes-info-div{
     width: 90%;
-    height: 60%;
+    height: fit-content;
     border: 1px white;
     border-radius: 10px;
     display: flex;
@@ -234,7 +234,7 @@ body{
     align-items: center;
     gap: 10px;
     padding: 5px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 .route-info-row{
@@ -340,7 +340,7 @@ body{
     font-weight: 500;
 }
 
-#start-trip-btn, .big-btn{
+#start-trip-btn, .big-btn, #end-trip-btn{
     width: 90%;
     height: 2em;
     font-size: 30px;
@@ -349,8 +349,14 @@ body{
     color: var(--foreground-color);
 }
 
-#start-trip-btn{
-    margin-bottom: 40px;
+#start-trip-bt, #end-trip-btn{
+    margin-bottom: 60px;
+
+}
+
+#end-trip-btn{
+    background-color: var(--delete-btn);
+    margin-top: 20px;
 }
 
 .big-btn{
@@ -367,6 +373,10 @@ body{
 #start-trip-btn:disabled{
     color: var(--navbar-color);
     background-color: var(--ui-bg-color);
+}
+
+#start-tripbtn{
+    margin-top: 0;
 }
 
 #user-card-div{

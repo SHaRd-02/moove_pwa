@@ -24,7 +24,8 @@ const tarifPriceEle = document.getElementById('tarif-price');
 const routeEtaEle = document.getElementById('route-eta');
 // start trip elements
 const startTripBtn = document.getElementById('start-trip-btn');
-console.log("startTripBtn:", startTripBtn);
+const endTripBtn = document.getElementById('end-trip-btn')
+//console.log("startTripBtn:", startTripBtn);
 // card user elements
 const userCardDiv = document.getElementById('user-card-div');
 const loaderEle = document.getElementById('loader-div');
@@ -82,6 +83,7 @@ let directionsService;
 let directionsRenderer;
 let userMarker = null;
 const zoomLevel = 14;
+let geoWatchId = null;
 
 
 //user info from firebase
@@ -454,6 +456,8 @@ newsSectionBtn.addEventListener('click', () => {
 
 searchSectionBtn.addEventListener('click', () => {
     showSection(searchSectionEle);
+    limpiarYMostrarBuses();
+
 });
 
 
@@ -533,12 +537,13 @@ startTripBtn.addEventListener('click', () => {
         console.log()
         if (isNearRoute) {
           // El usuario está dentro del radio permitido, iniciar el viaje
-          startTripBtn.disabled = true;
-          startTripBtn.innerText = 'Viaje en curso...';
+          startTripBtn.classList.toggle('hidden');
+          endTripBtn.classList.toggle('hidden');
+
           routeEtaEle.style.color = "rgb(15, 203, 15)";
 
           // Iniciar seguimiento de la ubicación del usuario
-          navigator.geolocation.watchPosition(
+          geoWatchId =  navigator.geolocation.watchPosition(
             position => {
               const userPosition = {
                 lat: position.coords.latitude,
@@ -756,3 +761,23 @@ async function limpiarYMostrarBuses() {
     }
   });
 }
+
+function terminarViaje() {
+  if (geoWatchId !== null) {
+    navigator.geolocation.clearWatch(geoWatchId);
+    geoWatchId = null;
+  }
+
+  if (userMarker) {
+    userMarker.setMap(null);
+    userMarker = null;
+  }
+
+  startTripBtn.classList.toggle('hidden');
+  endTripBtn.classList.toggle('hidden');
+  routeEtaEle.style.color = "";
+  limpiarYMostrarBuses();
+
+}
+
+endTripBtn.addEventListener('click', terminarViaje);
