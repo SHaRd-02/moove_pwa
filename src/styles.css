@@ -679,7 +679,7 @@ h5{
 }
 
 .news-actions{
-    border: solid 1px orange;
+    border: 1px orange;
     display: flex;
     flex-direction: row;
     
