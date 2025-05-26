@@ -1,11 +1,11 @@
 :root {
     --primary-color: rgb(73, 118, 215); 
-    --button-color: #BD93F9;
+    --button-color: #c3e247;
     --foreground-color: #F8F8F2; 
     --background-color: #282A36; 
     --ui-bg-color: #44475a; 
     --secondary-color: pink;
-    --navbar-color: #6272A4;
+    --navbar-color: #473b97;
     --water-color: #4a69c6;
     --stop-number: rgb(237, 87, 23);
     --card-body: #899E8B;
@@ -13,6 +13,7 @@
     --card-left: #706C61;
     --news-div: #262834;
     --delete-btn: rgb(191, 23, 23); 
+    --button-fg: #9494e5;
 }
 
 
@@ -158,7 +159,7 @@ body{
     height: 100%;
     border-radius: 0 10px 10px 0;
     border: none;
-    color: white;
+    color: var(--button-fg);
     background-color: var(--button-color);
 }
 
@@ -196,7 +197,7 @@ body{
 
 #select-route-btn{
     background-color: var(--button-color);
-    color: var(--foreground-color);
+    color: var(--button-fg);
     width: 20%;
     padding: 5px;
     border-radius: 5px;
@@ -346,7 +347,7 @@ body{
     font-size: 30px;
     border-radius: 5px;
     background-color: var(--button-color);
-    color: var(--foreground-color);
+    color: var(--button-fg);
 }
 
 #start-trip-bt, #end-trip-btn{
@@ -465,7 +466,7 @@ body{
     height: 60px;
     border-radius: 20px;
     background-color: var(--button-color);
-    color: var(--foreground-color);
+    color: var(--button-fg);
     position: fixed;
     z-index: 2000;
     bottom: 120px;
@@ -588,7 +589,7 @@ h3{
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: stretch;
     margin: 20px auto;
     padding: 5px;
     border-bottom: solid 1px rgba(123, 123, 123, 0.2);
@@ -599,10 +600,9 @@ h3{
 .news-user-div{
     border: 1px blue;
     width: 10%;
-    height: 51px;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
     padding: 2px;
@@ -677,6 +677,13 @@ h5{
     margin-top: 10px;
 }
 
+.news-actions{
+    border: solid 1px orange;
+    display: flex;
+    flex-direction: row;
+    
+}
+
 .edit-btn{
     background-color: var(--card-banner);
     color: var(--foreground-color);
@@ -695,7 +702,8 @@ h5{
 }
 
 .news-act-details{
-    border: 1px blueviolet;
+    border:solid 1px blueviolet;
+    width: 10%;
     text-align: right;
     margin-top: 20px;
     padding-top: 20px;
@@ -729,7 +737,7 @@ h5{
 
 
 /* Media query para pantallas más grandes que un smartphone */
-@media (min-width: 600px) {
+@media (min-width: 900px) {
 
     html{
         background-color: rgb(38, 38, 38);
@@ -760,4 +768,27 @@ h5{
         height: 400px;
     }
 }
+
+
+@media (min-width: 768px) and (max-width: 850px) {
+    /* Estilos para tablets en orientación vertical y horizontal */
+    
+    body {
+        max-width: 850px;
+        max-height: 100svh;
+        margin: auto; /* Centra el body en la pantalla */
+        border: 1px black;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        border-radius: 25px;
+        background-color: whitesmoke;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+  
+    
+  }
+
 

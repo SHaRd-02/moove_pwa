@@ -1,6 +1,7 @@
 // imports from other js files
 import { ruta5y10ValleCoords, ruta5y10ValleWaypoints, rutaRefugioValleCoords } from "./routes.js";
 import { signInWithGoogle, getUserFromRedirect, auth, signOutUser, db, collection, addDoc, Timestamp, getDocs, storage, ref, uploadBytes, getDownloadURL, query, orderBy, deleteDoc, doc, onSnapshot, updateDoc } from './firebase.js';
+import { increment } from "firebase/firestore";
 
 
 // DOM elements
@@ -342,6 +343,8 @@ async function displayNews() {
           ${
             noticia.uid === currentUID
               ? `<div class="news-actions">
+                  <button class="news-like-btn"><i class="fa-solid fa-heart"></i></button>
+                  <i class="like-count-i" data-id="${noticiaID}">${noticia.likes}</i>
                   <details class ="news-act-details">
                     <summary>...</summary>
                     <button class="edit-btn" data-id="${noticiaID}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
@@ -372,7 +375,19 @@ async function displayNews() {
         const id = e.target.dataset.id;
         // Aquí puedes abrir un modal y cargar los datos actuales de la noticia con getDoc(...)
         // Luego haces updateDoc(...)
-        alert(`Funcionalidad de edición pendiente para ID: ${id}`);
+        alert(`Funcionalidad de edición pendiente para para futuras actulizaciones`);
+        displayNews();
+      });
+    });
+
+    document.querySelectorAll('.news-like-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        const docRef = doc(db, 'news', id);
+
+        await updateDoc( docRef, {
+          likes: increment(1)
+        });
       });
     });
 
