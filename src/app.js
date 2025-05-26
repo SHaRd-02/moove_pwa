@@ -344,7 +344,6 @@ async function displayNews() {
             noticia.uid === currentUID
               ? `<div class="news-actions">
                   <button class="news-like-btn"><i class="fa-solid fa-heart"></i></button>
-                  <i class="like-count-i" data-id="${noticiaID}">${noticia.likes}</i>
                   <details class ="news-act-details">
                     <summary>...</summary>
                     <button class="edit-btn" data-id="${noticiaID}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
